@@ -1,0 +1,52 @@
+<launch>
+  <!-- 初始位姿参数（解决问题2）
+       将下方数值修改为建图时小车的实际起始位置和朝向。
+       若建图时从地图原点(0,0)出发且朝向正东(0 rad)，保留默认值即可。 -->
+  <arg name="initial_pose_x"     default="0.0"/>
+  <arg name="initial_pose_y"     default="0.0"/>
+  <arg name="initial_pose_theta" default="0.0"/>
+  <!-- 是否在启动时向 AMCL 发布初始位姿。
+       若已通过 RViz 手动设置过初始位姿，可将此项设为 false。 -->
+  <arg name="use_initial_pose"   default="true"/>
+
+  <!-- 判断"仅旋转目标"时使用的 x/y 容差（米） -->
+  <arg name="position_tolerance"      default="0.1"/>
+  <!-- 判断角度变化是否"显著"的容差（弧度） -->
+  <arg name="angle_tolerance"         default="0.1"/>
+  <!-- 触发 x/y 漂移修正的阈值（米）（解决问题1） -->
+  <arg name="xy_correction_threshold" default="0.05"/>
+  <!-- 是否循环遍历目标点 -->
+  <arg name="loop_waypoints"          default="false"/>
+  <!-- 发布初始位姿后等待 AMCL 收敛的时间（秒） -->
+  <arg name="amcl_convergence_wait"   default="2.0"/>
+  <!-- 旋转完成后等待机器人停稳的时间（秒） -->
+  <arg name="rotation_settle_wait"    default="0.5"/>
+  <!-- 相邻目标点之间的停顿时间（秒） -->
+  <arg name="waypoint_pause"          default="0.3"/>
+  <!-- 目标点配置文件路径 -->
+  <arg name="nav_points_file"
+       default="$(find multi_point_nav)/config/nav_points.yaml"/>
+
+  <!-- 多点导航节点 -->
+  <node name="multi_point_nav" pkg="multi_point_nav"
+        type="multi_point_nav.py" output="screen">
+
+    <!-- 初始位姿（解决问题2） -->
+    <param name="initial_pose_x"     value="$(arg initial_pose_x)"/>
+    <param name="initial_pose_y"     value="$(arg initial_pose_y)"/>
+    <param name="initial_pose_theta" value="$(arg initial_pose_theta)"/>
+    <param name="use_initial_pose"   value="$(arg use_initial_pose)"/>
+
+    <!-- 导航参数 -->
+    <param name="position_tolerance"      value="$(arg position_tolerance)"/>
+    <param name="angle_tolerance"         value="$(arg angle_tolerance)"/>
+    <param name="xy_correction_threshold" value="$(arg xy_correction_threshold)"/>
+    <param name="loop_waypoints"          value="$(arg loop_waypoints)"/>
+    <param name="amcl_convergence_wait"   value="$(arg amcl_convergence_wait)"/>
+    <param name="rotation_settle_wait"    value="$(arg rotation_settle_wait)"/>
+    <param name="waypoint_pause"          value="$(arg waypoint_pause)"/>
+
+    <!-- 从 YAML 文件加载目标点列表 -->
+    <rosparam file="$(arg nav_points_file)" command="load" ns="~"/>
+  </node>
+</launch>
