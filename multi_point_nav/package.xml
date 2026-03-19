@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>multi_point_nav</name>
+  <version>0.1.0</version>
+  <description>
+    多点导航节点，解决三轮差速小车旋转后位置偏移问题以及导航初始位姿与建图起始位姿不一致的问题。
+    Multi-point navigation node for a three-wheel differential drive robot.
+    Fixes: (1) x/y drift after rotation-only goals; (2) initial pose mismatch between
+    navigation and the pose used during map building.
+  </description>
+
+  <maintainer email="user@example.com">user</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>rospy</depend>
+  <depend>actionlib</depend>
+  <depend>move_base_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>tf</depend>
+  <depend>std_msgs</depend>
+
+  <exec_depend>python3-yaml</exec_depend>
+
+  <export></export>
+</package>
